@@ -62,7 +62,7 @@ def _rviz_config_path_with_ns(template_path: str, ns: str) -> str:
     if not ns:
         return template_path
     text = Path(template_path).read_text(encoding='utf-8')
-    text = text.replace('Fixed Frame: base_link', f'Fixed Frame: {ns}/base_link')
+    text = text.replace('Fixed Frame: arm_base_link', f'Fixed Frame: {ns}/arm_base_link')
     text = text.replace('TF Prefix: ""', f'TF Prefix: "{ns}"')
     tmp = tempfile.NamedTemporaryFile(
         mode='w',
@@ -104,7 +104,7 @@ def resolve_model_path(context, *args, **kwargs):
     state_joint_topic = str(feedback_topic) if follow == 'true' else str(control_topic)
 
     # Multi-arm: RSP needs frame_prefix (e.g. left/) so /tf frames differ; RViz RobotModel
-    # needs Fixed Frame = <ns>/base_link and TF Prefix = <ns> only (RViz adds one / between).
+    # needs Fixed Frame = <ns>/arm_base_link and TF Prefix = <ns> only (RViz adds one / between).
     ns = namespace.strip()
     frame_prefix = f'{ns}/' if ns else ''
     rsp_params = {'robot_description': robot_description}
